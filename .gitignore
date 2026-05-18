@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.spec
+build/
+dist/
+recibos/*.txt
+pdv.db
+.venv/
+venv/
+.vscode/
+.claude/
