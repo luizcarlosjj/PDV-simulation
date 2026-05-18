@@ -111,14 +111,6 @@ class ReceiptWindow(ctk.CTkToplevel):
             return
         try:
             save_pdf(path, self.content)
-        except ImportError:
-            messagebox.showerror(
-                "Erro",
-                "Biblioteca 'reportlab' não está instalada.\n"
-                "Instale com:  pip install reportlab",
-                parent=self,
-            )
-            return
         except Exception as e:
             messagebox.showerror("Erro", f"Não foi possível gerar PDF:\n{e}", parent=self)
             return

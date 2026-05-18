@@ -13,7 +13,6 @@ pyinstaller ^
   --windowed ^
   --name "PDV-Simples" ^
   --collect-all customtkinter ^
-  --collect-all reportlab ^
   --hidden-import win32print ^
   --hidden-import win32ui ^
   main.py
