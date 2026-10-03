@@ -1,6 +1,7 @@
 """Camada de acesso ao banco de dados SQLite do PDV."""
 
 import os
+import sys
 import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, date
@@ -11,7 +12,14 @@ DB_FILENAME = "pdv.db"
 
 
 def get_db_path() -> str:
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    # Quando rodando como .exe gerado pelo PyInstaller (--onefile),
+    # __file__ aponta para o diretório temporário de extração que muda a cada
+    # execução. sys.executable aponta para o .exe real — é lá que o banco
+    # deve ficar para persistir os dados entre sessões.
+    if getattr(sys, "frozen", False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_dir, DB_FILENAME)
 
 

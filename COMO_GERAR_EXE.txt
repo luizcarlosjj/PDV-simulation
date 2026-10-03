@@ -1,0 +1,128 @@
+===================================================
+  PDV SIMPLES - COMO GERAR E DISTRIBUIR O .EXE
+===================================================
+
+REQUISITOS (somente no PC que vai GERAR o .exe)
+------------------------------------------------
+- Windows 10 ou 11
+- Python 3.10 ou 3.11 instalado (https://www.python.org/downloads/)
+  IMPORTANTE: durante a instalacao do Python, marque a opcao
+  "Add Python to PATH"
+- Conexao com a internet para baixar as dependencias
+
+
+PASSO A PASSO PARA GERAR O EXE
+---------------------------------
+
+1. Abra o Prompt de Comando ou PowerShell na pasta do projeto
+   (clique com botao direito na pasta > "Abrir no Terminal")
+
+2. Instale as dependencias (fazer isso UMA UNICA VEZ):
+
+      pip install -r requirements.txt
+
+   Aguarde todos os pacotes serem instalados.
+
+3. Gere o executavel rodando o script de build:
+
+      build.bat
+
+   Isso vai levar alguns minutos. Ao final aparece a mensagem:
+   "Executavel gerado com SUCESSO em: dist\PDV-Simples.exe"
+
+4. O arquivo gerado fica em:
+
+      dist\PDV-Simples.exe
+
+
+COMO DISTRIBUIR PARA OUTRO PC
+-------------------------------
+
+Basta copiar o arquivo:
+
+   dist\PDV-Simples.exe
+
+para qualquer PC com Windows 10 ou 11.
+NAO precisa instalar Python no PC de destino.
+NAO precisa copiar mais nenhum arquivo.
+
+O programa cria automaticamente na mesma pasta do .exe:
+  - pdv.db       -> banco de dados com todos os produtos e vendas
+  - recibos\     -> pasta onde os cupons sao salvos
+
+ATENCAO: nao mova o PDV-Simples.exe de pasta depois de ja ter
+usado o programa, pois o banco de dados (pdv.db) fica na mesma
+pasta do exe. Se mover o exe sem mover o pdv.db, os dados nao
+aparecerao mais.
+
+
+SOLUCAO DE PROBLEMAS
+---------------------
+
+PROBLEMA: O Windows bloqueia o exe com mensagem "Aplicativo desconhecido"
+SOLUCAO:  Clique em "Mais informacoes" e depois "Executar assim mesmo".
+          Isso acontece porque o exe nao possui assinatura digital.
+
+PROBLEMA: O antivirus bloqueia o exe
+SOLUCAO:  Adicione uma excecao para o arquivo PDV-Simples.exe no seu
+          antivirus. Executaveis gerados com PyInstaller as vezes sao
+          detectados como falsos positivos por antiviruses.
+
+PROBLEMA: O exe abre mas nao salva dados / dados somem ao fechar
+SOLUCAO:  Isso era um bug que ja foi corrigido (database.py usava o
+          caminho errado quando rodando como .exe). Regere o exe com
+          o build.bat atualizado.
+
+PROBLEMA: Erro ao clicar em "Imprimir"
+SOLUCAO:  O modulo de impressao (pywin32) precisa estar incluido no build.
+          O build.bat ja inclui os flags corretos:
+          --hidden-import win32print
+          --hidden-import win32ui
+          --hidden-import pywintypes
+          Regere o exe se necessario.
+
+PROBLEMA: A tela nao abre / erro de customtkinter
+SOLUCAO:  O flag --collect-all customtkinter e --collect-all darkdetect
+          precisam estar no build.bat. Verifique se o build.bat esta
+          atualizado e regere o exe.
+
+PROBLEMA: O build.bat falha com "pyinstaller nao reconhecido"
+SOLUCAO:  O PyInstaller nao esta instalado. Execute:
+          pip install pyinstaller>=6.6.0
+
+PROBLEMA: O exe funciona no meu PC mas nao no do amigo
+SOLUCAO:  - Verifique se o amigo esta rodando Windows 10 ou 11
+          - O exe deve ter permissao de escrita na pasta onde esta
+            (nao coloque em C:\Windows\ ou C:\Program Files\)
+          - Tente colocar o exe na Area de Trabalho ou em Documentos
+          - Verifique se o antivirus do amigo nao esta bloqueando
+
+
+ESTRUTURA DO PROJETO (referencia)
+-----------------------------------
+
+PDV-simulation/
+├── main.py              -> ponto de entrada do aplicativo
+├── database.py          -> banco de dados SQLite
+├── requirements.txt     -> dependencias Python
+├── build.bat            -> script para gerar o .exe
+├── ui/
+│   ├── sale_screen.py   -> tela de venda
+│   ├── products_screen.py -> tela de produtos
+│   ├── stock_screen.py  -> tela de estoque
+│   ├── history_screen.py  -> historico de vendas
+│   ├── report_screen.py -> relatorios
+│   ├── receipt_window.py  -> janela do cupom
+│   └── print_dialog.py  -> dialogo de impressao
+└── utils/
+    ├── helpers.py       -> formatacao de valores
+    └── receipt.py       -> geracao do cupom (TXT/PDF)
+
+
+VERSAO DO PYTHON RECOMENDADA
+------------------------------
+Python 3.10.x ou 3.11.x
+(Python 3.12+ pode ter incompatibilidades com algumas versoes do PyInstaller)
+
+
+===================================================
